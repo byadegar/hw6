@@ -95,5 +95,53 @@ bool boggleHelper(const std::set<std::string>& dict, const std::set<std::string>
 								   std::string word, std::set<std::string>& result, unsigned int r, unsigned int c, int dr, int dc)
 {
 //add your solution here!
+//recursively search 
+//don't change dr or dc but use to set r and c 
+//baacktrack 
+  //check bounds 
+  if (r>= board.size() || c >= board[0].size()){
+    return false; //can't go anywhere, ur done 
+  }
+
+  //we need to build the current word 
+  word += board[r][c]; 
+
+  //check if current word is a prefix
+  //if not, backtrack 
+  bool isPrefix;
+  if (prefix.find(word) != prefix.end()){
+    isPrefix = true; 
+  }
+  else {
+    isPrefix = false; 
+  }
+  bool isWord; 
+  if (dict.find(word) != dict.end()){
+    isWord = true; 
+  }
+  else {
+    isWord = false; 
+  }
+  if (isPrefix == false && isWord == false){
+    return false; 
+  }
+
+  //if we haven't returned false yet
+  //keep track of longer word down the path 
+  bool foundLongerWord = false; 
+  //move to next cell to continue search 
+  //store to check after
+  bool recursiveAfter = boggleHelper(dict, prefix, board, word, result, r +dr, c+dc, dr, dc);
+
+  if (recursiveAfter == true){
+    foundLongerWord = true; 
+  }
+  else if (foundLongerWord == false && isWord == true){
+    result.insert(word); 
+    return true; 
+  }
+
+//reutrn in the end if the longer word was found here on not
+  return foundLongerWord; 
 
 }
